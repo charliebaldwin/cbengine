@@ -1,9 +1,10 @@
 TARGET:=foo
-INCLUDES=-Ilib -Iglfw/include -Iglad/include
-LIBS=lib/shlinkle.cpp -Lglfw/lib-universal -lglfw3 glad/src/glad.c 
+BREW:=$(shell brew --prefix)
+INCLUDES=-I$(BREW)/include
+LIBS=-L$(BREW)/lib -lglfw -framework OpenGL
 
 $(TARGET): src/main.cpp
-	clang $(INCLUDES) src/main.cpp $(LIBS) -o bin/$(TARGET)
+	clang -o bin/$(TARGET) $(INCLUDES) src/main.cpp  $(LIBS) 
 
 clean: 
 	rm bin/$(TARGET)
