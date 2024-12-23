@@ -1,17 +1,20 @@
 #include <stdio.h>
 #include <shlinkle.h>
-#include <glfw3.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
-int main(void) {
+int main(void)
+{
 
     ShlinkleFunc("BIG SHLINKY");
 
-    if (!glfwInit()) {
+    if (!glfwInit())
+    {
         printf("GLFW initilization failed\n");
         return -1;
     }
 
-    GLFWwindow* window = glfwCreateWindow(600, 400, "cbengine", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(600, 400, "cbengine", NULL, NULL);
     if (!window)
     {
         printf("GLFW create window failed\n");
