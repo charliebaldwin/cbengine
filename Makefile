@@ -1,5 +1,5 @@
 TARGET:=foo
-INCLUDE_PATH="lib"
+INCLUDES="-Ilib -Iglfw/include/GLFW"
 LIBS=lib/shlinkle.cpp
 
 $(TARGET): src/main.cpp
@@ -7,3 +7,5 @@ $(TARGET): src/main.cpp
 
 clean: 
 	rm bin/$(TARGET)
+
+.default: $(TARGET)
