@@ -5,8 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/lib",
-                "${workspaceFolder}/glfw/include/GLFW",
-                "${workspaceFolder}/glad/include"
+                "${workspaceFolder}/include"
             ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "${default}",

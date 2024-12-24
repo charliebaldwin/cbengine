@@ -1,6 +1,6 @@
-TARGET:=foo
+TARGET:=cbengine
 BREW:=$(shell brew --prefix)
-INCLUDES=-I$(BREW)/include
+INCLUDES=-I$(BREW)/include -Iinclude
 LIBS=-L$(BREW)/lib -lglfw -framework OpenGL
 
 $(TARGET): src/main.cpp
