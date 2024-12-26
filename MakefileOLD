@@ -1,12 +1,15 @@
-TARGET:=cbengine
+TARGET:=cbengine #output file name
 BREW:=$(shell brew --prefix)
 INCLUDES=-I$(BREW)/include -Iinclude
 LIBS=-L$(BREW)/lib -lglfw -framework OpenGL
 
 $(TARGET): src/main.cpp
-	clang -o bin/$(TARGET) $(INCLUDES) src/main.cpp  $(LIBS) 
+	clang -o bin/$(TARGET) $(INCLUDES) src/main.cpp  $(LIBS) -std=c++11
 
 clean: 
 	rm bin/$(TARGET)
+
+run:
+	bin/$(TARGET)
 
 .default: $(TARGET)
