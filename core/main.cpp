@@ -10,7 +10,10 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "imnodes.h"
+
 #include <stdio.h>
+#include <vector>
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -80,6 +83,8 @@ int main(int, char**)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
+    ImNodes::CreateContext();
+
     // Setup Dear ImGui style
     //ImGui::StyleColorsDark();
     ImGui::StyleColorsLight();
@@ -109,6 +114,9 @@ int main(int, char**)
     bool show_demo_window = true;
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    std::vector<std::pair<int, int>> links;
+
 
     // Main loop
 #ifdef __EMSCRIPTEN__
@@ -147,6 +155,49 @@ int main(int, char**)
             static int counter = 0;
 
             ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+            ImNodes::BeginNodeEditor();
+
+            ImNodes::BeginNode(1);
+            ImNodes::BeginNodeTitleBar();
+            ImGui::TextUnformatted("input node");
+            ImNodes::EndNodeTitleBar();
+            ImGui::Dummy(ImVec2(80.0f, 45.0f));
+            const int output_attr_id = 3;
+            ImNodes::BeginOutputAttribute(output_attr_id);
+            // in between Begin|EndAttribute calls, you can call ImGui
+            // UI functions
+            ImGui::Text("output pin");
+            ImNodes::EndOutputAttribute();
+            ImNodes::EndNode();
+
+            ImNodes::BeginNode(2);
+
+            ImNodes::BeginNodeTitleBar();
+            ImGui::TextUnformatted("output node");
+            ImNodes::EndNodeTitleBar();
+            // pins and other node UI content omitted...
+            const int input_attr_id = 4;
+            ImNodes::BeginInputAttribute(input_attr_id);
+            ImGui::Text("input pin");
+            ImNodes::EndInputAttribute();
+            ImNodes::EndNode();
+
+            for (int i = 0; i < links.size(); ++i)
+            {
+                const std::pair<int, int> p = links[i];
+                // in this case, we just use the array index of the link
+                // as the unique identifier
+                ImNodes::Link(i, p.first, p.second);
+            }
+
+            ImNodes::EndNodeEditor();
+
+            int start_attr, end_attr;
+            if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
+            {
+                links.push_back(std::make_pair(start_attr, end_attr));
+            }
 
             ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
             ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
@@ -190,6 +241,7 @@ int main(int, char**)
 #endif
 
     // Cleanup
+    ImNodes::DestroyContext();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

@@ -13,6 +13,8 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 
+#include "node.h"
+
 int initGLFW();
 
 // callbacks
