@@ -20,6 +20,8 @@
 #endif
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
+#include "node.h"
+
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
 // Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
@@ -117,6 +119,8 @@ int main(int, char**)
 
     std::vector<std::pair<int, int>> links;
 
+    Node* myNode = new Node("poop node\n");
+
 
     // Main loop
 #ifdef __EMSCRIPTEN__
@@ -158,30 +162,34 @@ int main(int, char**)
 
             ImNodes::BeginNodeEditor();
 
-            ImNodes::BeginNode(1);
-            ImNodes::BeginNodeTitleBar();
-            ImGui::TextUnformatted("input node");
-            ImNodes::EndNodeTitleBar();
-            ImGui::Dummy(ImVec2(80.0f, 45.0f));
-            const int output_attr_id = 3;
-            ImNodes::BeginOutputAttribute(output_attr_id);
-            // in between Begin|EndAttribute calls, you can call ImGui
-            // UI functions
-            ImGui::Text("output pin");
-            ImNodes::EndOutputAttribute();
-            ImNodes::EndNode();
+            myNode->DrawNode();
 
-            ImNodes::BeginNode(2);
+            // ImNodes::BeginNode(1);
+            // ImNodes::BeginNodeTitleBar();
+            // ImGui::TextUnformatted("input node");
+            // ImNodes::EndNodeTitleBar();
+            // ImGui::Dummy(ImVec2(80.0f, 45.0f));
+            // const int output_attr_id = 3;
+            // ImNodes::BeginOutputAttribute(output_attr_id);
+            // // in between Begin|EndAttribute calls, you can call ImGui
+            // // UI functions
+            // ImGui::Text("output pin");
+            // ImNodes::EndOutputAttribute();
+            // ImNodes::EndNode();
 
-            ImNodes::BeginNodeTitleBar();
-            ImGui::TextUnformatted("output node");
-            ImNodes::EndNodeTitleBar();
-            // pins and other node UI content omitted...
-            const int input_attr_id = 4;
-            ImNodes::BeginInputAttribute(input_attr_id);
-            ImGui::Text("input pin");
-            ImNodes::EndInputAttribute();
-            ImNodes::EndNode();
+            // ImNodes::BeginNode(2);
+
+            // ImNodes::BeginNodeTitleBar();
+            // ImGui::TextUnformatted("output node");
+            // ImNodes::EndNodeTitleBar();
+            // // pins and other node UI content omitted...
+            // const int input_attr_id = 4;
+            // ImNodes::BeginInputAttribute(input_attr_id);
+            // ImGui::Text("input pin");
+            // ImNodes::EndInputAttribute();
+            // ImNodes::EndNode();
+
+
 
             for (int i = 0; i < links.size(); ++i)
             {
