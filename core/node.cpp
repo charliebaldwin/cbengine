@@ -3,21 +3,33 @@
 
 int Node::nextID = 0;
 
+int numInputs = 2;
 
 Node::Node(std::string name)
 : name(name) {
 
     id = nextID++;
 
-    for (int i=0; i<5; i++) {
+    for (int i=0; i<numInputs; i++) {
         int pinID = nextID++;
         NodePin newPin = {
             pinID,
+            i,
             "input",
-            nullptr
+            nullptr,
+            this
         };
-        inputs[i] = newPin;
+        inputPins[i] = newPin;
     }
+
+    int outputPinID = nextID++;
+    outputPin = {
+        outputPinID,
+        0,
+        "output",
+        nullptr,
+        this
+    };
 
     printf("ran constructor\n");
 }
@@ -27,7 +39,7 @@ float Node::GetOutput() {
 }
 
 void Node::ConnectInputNode(Node* inputNode, int index) { 
-    inputs[index].connectedNode = inputNode;
+    inputPins[index].connectedNode = inputNode;
 }
 void Node::DisconnectInputNode(int index) {
 
@@ -42,19 +54,26 @@ void Node::DrawTitleBar() {
     ImGui::TextUnformatted(std::to_string(id).c_str());
 
     ImNodes::EndNodeTitleBar();
-
-    ImGui::Dummy(ImVec2(80.0f, 45.0f));
 }
 
 void Node::DrawBody() {
 
-    for (int i=0; i<5; i++) {
-        ImNodes::BeginInputAttribute(inputs[i].id);
+    // OUTPUT
+    ImNodes::BeginOutputAttribute(outputPin.id);
+    ImGui::Text(outputPin.title.c_str());
+    ImGui::SameLine();
+    ImGui::TextUnformatted(std::to_string(outputPin.id).c_str());
+    ImNodes::EndOutputAttribute();
 
-        ImGui::Text(inputs[i].title.c_str());
+
+    ImGui::Dummy(ImVec2(100.0f, 15.0f));
+
+    // INPUTS
+    for (int i=0; i<numInputs; i++) {
+        ImNodes::BeginInputAttribute(inputPins[i].id);
+        ImGui::Text(inputPins[i].title.c_str());
         ImGui::SameLine();
-        ImGui::TextUnformatted(std::to_string(inputs[i].id).c_str());
-
+        ImGui::TextUnformatted(std::to_string(inputPins[i].id).c_str());
         ImNodes::EndInputAttribute();
     }
 

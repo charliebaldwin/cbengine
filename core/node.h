@@ -1,9 +1,13 @@
 #include <string>
 
+class Node;
+
 struct NodePin {
     int id;
+    int index;
     std::string title;
     Node* connectedNode;
+    Node* parentNode;
 };
 
 class Node {
@@ -22,7 +26,8 @@ public:
     virtual void DrawNode();
 
 private:
-    NodePin inputs[5];
+    NodePin inputPins[2];
+    NodePin outputPin;
 
     int id;
     std::string name;
