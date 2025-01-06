@@ -1,4 +1,7 @@
+#pragma once
+
 #include <string>
+#include <vector>
 
 class Node;
 
@@ -20,17 +23,24 @@ public:
     void ConnectInputNode(Node* inputNode, int index);
     void DisconnectInputNode(int index);
 
+    static Node* GetPinParentNode(int pinID);
+
+    float GetInputValue(NodePin inputPin);
+
     void DrawTitleBar();
-    void DrawBody();
+    virtual void DrawBody();
+    void DrawNode();
 
-    virtual void DrawNode();
+    std::string name;
 
-private:
-    NodePin inputPins[2];
+
+protected:
+    int numInputs;
+    NodePin inputPins[10];
     NodePin outputPin;
 
     int id;
-    std::string name;
 
     static int nextID;
+    static std::vector<NodePin*> pinsList;
 };

@@ -21,7 +21,8 @@
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
 #include "node.h"
-#include "nodeRegistry.h"
+#include "viewerNode.h"
+#include "constantNode.h"
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
@@ -121,11 +122,11 @@ int main(int, char**)
 
     std::vector<std::pair<int, int>> links;
 
-    NodeRegistry* nodeRegistry = new NodeRegistry();
-
     Node* myNode = new Node("poop node\n");
     Node* myNode2 = new Node("pee node\n");
-
+    ViewerNode* myViewerNode = new ViewerNode("Viewer\n");
+    ConstantNode* myConstNode = new ConstantNode("Constant 1\n", 3.5);
+    ConstantNode* myConstNode2 = new ConstantNode("Constant 2\n", 12.33);
 
 
     // Main loop
@@ -170,6 +171,9 @@ int main(int, char**)
 
             myNode->DrawNode();
             myNode2->DrawNode();
+            myViewerNode->DrawNode();
+            myConstNode->DrawNode();
+            myConstNode2->DrawNode();
 
 
 
@@ -186,6 +190,11 @@ int main(int, char**)
             int start_attr, end_attr;
             if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
             {
+                Node* node1 = Node::GetPinParentNode(start_attr);
+                Node* node2 = Node::GetPinParentNode(end_attr);
+
+                node2->ConnectInputNode(node1, 0);
+
                 links.push_back(std::make_pair(start_attr, end_attr));
             }
 

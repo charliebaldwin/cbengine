@@ -2,11 +2,13 @@
 #include "imnodes.h"
 
 int Node::nextID = 0;
+std::vector<NodePin*> Node::pinsList;
 
-int numInputs = 2;
 
 Node::Node(std::string name)
 : name(name) {
+
+    numInputs = 2;
 
     id = nextID++;
 
@@ -20,6 +22,7 @@ Node::Node(std::string name)
             this
         };
         inputPins[i] = newPin;
+        pinsList.push_back(&inputPins[i]);
     }
 
     int outputPinID = nextID++;
@@ -30,6 +33,8 @@ Node::Node(std::string name)
         nullptr,
         this
     };
+    pinsList.push_back(&outputPin);
+
 
     printf("ran constructor\n");
 }
@@ -43,6 +48,23 @@ void Node::ConnectInputNode(Node* inputNode, int index) {
 }
 void Node::DisconnectInputNode(int index) {
 
+}
+
+Node* Node::GetPinParentNode(int pinID) {
+    for (int i=0; i<pinsList.size(); i++) {
+        if (pinsList[i]->id == pinID) {
+            return pinsList[i]->parentNode;
+        }
+    }
+    return nullptr;
+}
+
+float Node::GetInputValue(NodePin inputPin) {
+    if (inputPin.connectedNode != nullptr) {
+        return inputPin.connectedNode->GetOutput();
+    } else {
+        return 0.0;
+    }
 }
 
 void Node::DrawTitleBar() {

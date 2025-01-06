@@ -18,16 +18,17 @@ EXE = cbengine
 OUTPUT_DIR = bin
 OBJ_DIR = bin
 IMGUI_DIR = ../lib/imgui
+IMNODES_DIR = ../lib/imnodes
 
 # Compiling Files
 # - start with main
 SOURCES = main.cpp
-SOURCES += node.cpp
+SOURCES += node.cpp viewerNode.cpp constantNode.cpp
 # - add imgui code
 SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp
 # - add relevant imgui backends
 SOURCES += $(IMGUI_DIR)/backends/imgui_impl_glfw.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
-SOURCES += $(IMGUI_DIR)/imnodes.cpp
+SOURCES += $(IMNODES_DIR)/imnodes.cpp
 
 # 
 OBJS = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(basename $(notdir $(SOURCES)))))
@@ -35,7 +36,7 @@ $(info -->   OBJS is $(OBJS))
 UNAME_S := $(shell uname -s)
 LINUX_GL_LIBS = -lGL
 
-CXXFLAGS = -std=c++11 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
+CXXFLAGS = -std=c++11 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends -I$(IMNODES_DIR)
 CXXFLAGS += -g -Wall -Wformat
 LIBS =
 
@@ -85,6 +86,9 @@ endif
 ##---------------------------------------------------------------------
 
 $(OUTPUT_DIR)/%.o:%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OUTPUT_DIR)/%.o:$(IMNODES_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(OUTPUT_DIR)/%.o:$(IMGUI_DIR)/%.cpp
