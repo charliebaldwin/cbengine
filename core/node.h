@@ -42,6 +42,8 @@ public:
 
     static bool showIDs;
 
+    int GetID();
+
 
 protected:
     int numInputs;

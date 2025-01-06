@@ -41,6 +41,10 @@ static void glfw_error_callback(int error, const char* description)
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+
+std::vector<Node*> nodes;
+
+
 // Main code
 int main(int, char**)
 {
@@ -126,15 +130,31 @@ int main(int, char**)
 
     std::vector<std::pair<int, int>> links;
 
-    Node* myNode = new Node("poop node\n");
-    Node* myNode2 = new Node("pee node\n");
-    ViewerNode* myViewerNode = new ViewerNode("Viewer");
-    ConstantNode* myConstNode = new ConstantNode("Constant", 3.5);
-    ConstantNode* myConstNode2 = new ConstantNode("Constant", 12.33);
-    AddNode* myAddNode = new AddNode("Add");
-    SubNode* mySubNode = new SubNode("Subtract");
-    MultNode* myMultNode = new MultNode("Multiply");
-    RerouteNode* myRerouteNode = new RerouteNode();
+
+    // Node* myNode = new Node("poop node\n");
+    // Node* myNode2 = new Node("pee node\n");
+    // ViewerNode* myViewerNode = new ViewerNode("Viewer");
+    // ConstantNode* myConstNode = new ConstantNode("Constant", 3.5);
+    // ConstantNode* myConstNode2 = new ConstantNode("Constant", 12.33);
+    // AddNode* myAddNode = new AddNode("Add");
+    // SubNode* mySubNode = new SubNode("Subtract");
+    // MultNode* myMultNode = new MultNode("Multiply");
+    // RerouteNode* myRerouteNode = new RerouteNode();
+
+    nodes.push_back(new ViewerNode("Viewer"));
+    nodes.push_back(new ConstantNode("Constant", 3.5));
+    nodes.push_back(new ConstantNode("Constant", 12.33));
+    nodes.push_back(new AddNode("Add"));
+    nodes.push_back(new SubNode("Subtract"));
+    nodes.push_back(new MultNode("Multiply"));
+    nodes.push_back(new RerouteNode());
+
+    ImNodes::SetNodeScreenSpacePos(nodes[1]->GetID(), *new ImVec2(50.0, 150.0));
+    ImNodes::SetNodeScreenSpacePos(nodes[2]->GetID(), *new ImVec2(50.0, 300.0));
+    ImNodes::SetNodeScreenSpacePos(nodes[3]->GetID(), *new ImVec2(150.0, 150.0));
+    ImNodes::SetNodeScreenSpacePos(nodes[4]->GetID(), *new ImVec2(150.0, 300.0));
+    ImNodes::SetNodeScreenSpacePos(nodes[0]->GetID(), *new ImVec2(400.0, 200.0));
+    
 
 
     // Main loop
@@ -175,6 +195,41 @@ int main(int, char**)
 
             ImGui::BeginMainMenuBar();
             ImGui::Checkbox("Show IDs", &Node::showIDs);
+            if (ImGui::BeginMenu("Add Nodes")) {
+                ImVec2* newNodePosition = new ImVec2(200.0, 200.0);
+
+                if (ImGui::MenuItem("Constant")) {
+                    nodes.push_back(new ConstantNode("Constant", 0.0));
+                    ImNodes::SetNodeScreenSpacePos(nodes[nodes.size()-1]->GetID(), *newNodePosition);
+                }
+                if (ImGui::MenuItem("Viewer")) {
+                    nodes.push_back(new ViewerNode("Viewer"));
+                    ImNodes::SetNodeScreenSpacePos(nodes[nodes.size()-1]->GetID(), *newNodePosition);
+                }
+                if (ImGui::MenuItem("Add")) {
+                    nodes.push_back(new AddNode("Add"));
+                    ImNodes::SetNodeScreenSpacePos(nodes[nodes.size()-1]->GetID(), *newNodePosition);
+                }
+                if (ImGui::MenuItem("Subtract")) {
+                    nodes.push_back(new SubNode("Subtract"));
+                    ImNodes::SetNodeScreenSpacePos(nodes[nodes.size()-1]->GetID(), *newNodePosition);
+                }
+                if (ImGui::MenuItem("Multiply")) {
+                    nodes.push_back(new MultNode("Multiply"));
+                    ImNodes::SetNodeScreenSpacePos(nodes[nodes.size()-1]->GetID(), *newNodePosition);
+                }
+                if (ImGui::MenuItem("Reroute")) {
+                    nodes.push_back(new RerouteNode());
+                    ImNodes::SetNodeScreenSpacePos(nodes[nodes.size()-1]->GetID(), *newNodePosition);
+                }
+
+                ImGui::EndMenu();
+            }
+            // if (ImGui::Button("+", *new ImVec2(25.0, 25.0))) {
+            //     RerouteNode* newReroute = new RerouteNode();
+            //     ImNodes::SetNodeScreenSpacePos(newReroute->GetID(), *new ImVec2(200.0, 200.0));
+            //     nodes.push_back(newReroute);
+            // }
             ImGui::EndMainMenuBar();
 
             ImGui::Begin("Node Editor");                          // Create a window called "Hello, world!" and append into it.
@@ -183,13 +238,16 @@ int main(int, char**)
 
             // myNode->DrawNode();
             // myNode2->DrawNode();
-            myViewerNode->DrawNode();
-            myConstNode->DrawNode();
-            myConstNode2->DrawNode();
-            myAddNode->DrawNode();
-            mySubNode->DrawNode();
-            myMultNode->DrawNode();
-            myRerouteNode->DrawNode();
+            // myViewerNode->DrawNode();
+            // myConstNode->DrawNode();
+            // myConstNode2->DrawNode();
+            // myAddNode->DrawNode();
+            // mySubNode->DrawNode();
+            // myMultNode->DrawNode();
+            // myRerouteNode->DrawNode();
+            for (int i=0; i<nodes.size(); i++) {
+                nodes[i]->DrawNode();
+            }
 
 
 

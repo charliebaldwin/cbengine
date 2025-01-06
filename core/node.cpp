@@ -129,6 +129,10 @@ void Node::DrawBody() {
 
 }
 
+int Node::GetID() {
+    return id;
+}
+
 void Node::DrawNode() {
     ImNodes::PushColorStyle(ImNodesCol_TitleBar, titleColor);
 
