@@ -23,6 +23,9 @@
 #include "node.h"
 #include "viewerNode.h"
 #include "constantNode.h"
+#include "addNode.h"
+#include "subNode.h"
+#include "multNode.h"
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
@@ -124,9 +127,12 @@ int main(int, char**)
 
     Node* myNode = new Node("poop node\n");
     Node* myNode2 = new Node("pee node\n");
-    ViewerNode* myViewerNode = new ViewerNode("Viewer\n");
-    ConstantNode* myConstNode = new ConstantNode("Constant 1\n", 3.5);
-    ConstantNode* myConstNode2 = new ConstantNode("Constant 2\n", 12.33);
+    ViewerNode* myViewerNode = new ViewerNode("Viewer");
+    ConstantNode* myConstNode = new ConstantNode("Constant", 3.5);
+    ConstantNode* myConstNode2 = new ConstantNode("Constant", 12.33);
+    AddNode* myAddNode = new AddNode("Add");
+    SubNode* mySubNode = new SubNode("Subtract");
+    MultNode* myMultNode = new MultNode("Multiply");
 
 
     // Main loop
@@ -165,35 +171,44 @@ int main(int, char**)
             static float f = 0.0f;
             static int counter = 0;
 
+            ImGui::BeginMainMenuBar();
+            ImGui::Checkbox("Show IDs", &Node::showIDs);
+            ImGui::EndMainMenuBar();
+
             ImGui::Begin("Node Editor");                          // Create a window called "Hello, world!" and append into it.
 
             ImNodes::BeginNodeEditor();
 
-            myNode->DrawNode();
-            myNode2->DrawNode();
+            // myNode->DrawNode();
+            // myNode2->DrawNode();
             myViewerNode->DrawNode();
             myConstNode->DrawNode();
             myConstNode2->DrawNode();
+            myAddNode->DrawNode();
+            mySubNode->DrawNode();
+            myMultNode->DrawNode();
 
 
 
-            for (int i = 0; i < links.size(); ++i)
-            {
-                const std::pair<int, int> p = links[i];
-                // in this case, we just use the array index of the link
-                // as the unique identifier
-                ImNodes::Link(i, p.first, p.second);
-            }
+            // for (int i = 0; i < links.size(); ++i)
+            // {
+            //     const std::pair<int, int> p = links[i];
+            //     // in this case, we just use the array index of the link
+            //     // as the unique identifier
+            //     ImNodes::Link(i, p.first, p.second);
+            // }
+
+            Node::DrawPinLinks();
 
             ImNodes::EndNodeEditor();
 
             int start_attr, end_attr;
             if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
             {
-                Node* node1 = Node::GetPinParentNode(start_attr);
-                Node* node2 = Node::GetPinParentNode(end_attr);
+                NodePin* startPin = Node::GetPinByID(start_attr);
+                NodePin* endPin = Node::GetPinByID(end_attr);
 
-                node2->ConnectInputNode(node1, 0);
+                endPin->parentNode->ConnectInputPin(startPin, endPin->index);
 
                 links.push_back(std::make_pair(start_attr, end_attr));
             }

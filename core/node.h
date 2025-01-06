@@ -9,6 +9,7 @@ struct NodePin {
     int id;
     int index;
     std::string title;
+    NodePin* connectedPin;
     Node* connectedNode;
     Node* parentNode;
 };
@@ -20,10 +21,11 @@ public:
 
     virtual float GetOutput();    
     
-    void ConnectInputNode(Node* inputNode, int index);
-    void DisconnectInputNode(int index);
+    void ConnectInputPin(NodePin* inputPin, int index);
+    void DisconnectInputPin(int index);
 
     static Node* GetPinParentNode(int pinID);
+    static NodePin* GetPinByID(int pinID);
 
     float GetInputValue(NodePin inputPin);
 
@@ -33,14 +35,24 @@ public:
 
     std::string name;
 
+    static void DrawPinLinks();
+    static void ToggleIDDisplay();
+
+    static bool showIDs;
+
 
 protected:
     int numInputs;
+    int numOutputs;
     NodePin inputPins[10];
-    NodePin outputPin;
+    NodePin outputPins[10];
+
+    void CreateInputPins(int numPins);
+    void CreateOutputPins(int numPins);
 
     int id;
 
     static int nextID;
     static std::vector<NodePin*> pinsList;
+
 };
