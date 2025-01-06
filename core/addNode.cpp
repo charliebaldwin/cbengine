@@ -8,6 +8,9 @@ AddNode::AddNode(std::string name) : Node(name) {
     numInputs = 2;
     numOutputs = 1;
 
+    AddNode::titleColor = ImColor((float)1.0, (float)0.0, (float)0.4);
+
+
     CreateInputPins(numInputs);
     CreateOutputPins(numOutputs);
 

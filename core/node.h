@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include "imnodes.h"
+#include "imgui.h"
 
 class Node;
 
@@ -54,5 +56,7 @@ protected:
 
     static int nextID;
     static std::vector<NodePin*> pinsList;
+
+    static ImColor titleColor;
 
 };

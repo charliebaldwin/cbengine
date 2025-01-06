@@ -19,7 +19,7 @@ void ViewerNode::DrawBody() {
 
     ImGui::Value("value", value);
 
-    ImGui::Dummy(ImVec2(100.0f, 15.0f));
+    ImGui::Dummy(ImVec2(20.0f, 5.0f));
 
     // INPUTS
     for (int i=0; i<numInputs; i++) {

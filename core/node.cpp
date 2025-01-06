@@ -3,6 +3,7 @@
 
 int Node::nextID = 0;
 bool Node::showIDs = false;
+ImColor Node::titleColor = ImColor((float)1.0, (float)0.0, (float)0.4);
 std::vector<NodePin*> Node::pinsList;
 
 
@@ -129,12 +130,19 @@ void Node::DrawBody() {
 }
 
 void Node::DrawNode() {
+    ImNodes::PushColorStyle(ImNodesCol_TitleBar, titleColor);
+
     ImNodes::BeginNode(id);
 
-    this->DrawTitleBar();
+    if (name != "") {
+        this->DrawTitleBar();
+    }
     this->DrawBody();
 
     ImNodes::EndNode();
+
+    ImNodes::PopColorStyle();
+
 }
 
 void Node::DrawPinLinks() {

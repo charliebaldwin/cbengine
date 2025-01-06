@@ -1,10 +1,13 @@
 #include "constantNode.h"
 #include "imnodes.h"
 
+
 ConstantNode::ConstantNode(std::string name, int value) : Node(name)
 {
     id = nextID++;
     constValue = value;
+
+    ConstantNode::titleColor = ImColor((float)0.0, (float)1.0, (float)0.4);
 
     numInputs = 0;
     numOutputs = 1;
@@ -24,7 +27,7 @@ void ConstantNode::DrawBody() {
     ImGui::SetNextItemWidth(80.0);
     ImGui::DragFloat("", &constValue);
 
-    ImGui::Dummy(ImVec2(100.0f, 15.0f));
+    ImGui::Dummy(ImVec2(20.0f, 5.0f));
 
     // OUTPUT
     for (int i=0; i<numOutputs; i++) {
