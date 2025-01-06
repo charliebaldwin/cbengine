@@ -194,7 +194,6 @@ int main(int, char**)
             static int counter = 0;
 
             ImGui::BeginMainMenuBar();
-            ImGui::Checkbox("Show IDs", &Node::showIDs);
             if (ImGui::BeginMenu("Add Nodes")) {
                 ImVec2* newNodePosition = new ImVec2(200.0, 200.0);
 
@@ -225,11 +224,12 @@ int main(int, char**)
 
                 ImGui::EndMenu();
             }
-            // if (ImGui::Button("+", *new ImVec2(25.0, 25.0))) {
-            //     RerouteNode* newReroute = new RerouteNode();
-            //     ImNodes::SetNodeScreenSpacePos(newReroute->GetID(), *new ImVec2(200.0, 200.0));
-            //     nodes.push_back(newReroute);
-            // }
+
+            if (ImGui::BeginMenu("Settings")) {
+                ImGui::Checkbox("Show IDs", &Node::showIDs);
+
+                ImGui::EndMenu();
+            }
             ImGui::EndMainMenuBar();
 
             ImGui::Begin("Node Editor");                          // Create a window called "Hello, world!" and append into it.
