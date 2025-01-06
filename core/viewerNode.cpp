@@ -3,33 +3,12 @@
 
 ViewerNode::ViewerNode(std::string name) : Node(name)
 {
-    numInputs = 1;
     id = nextID++;
 
-    for (int i=0; i<numInputs; i++) {
-        int pinID = nextID++;
-        NodePin newPin = {
-            pinID,
-            i,
-            "input",
-            nullptr,
-            this
-        };
-        inputPins[i] = newPin;
-        pinsList.push_back(&inputPins[i]);
+    numInputs = 1;
+    numOutputs = 0;
 
-    }
-
-    int outputPinID = nextID++;
-    outputPin = {
-        outputPinID,
-        0,
-        "output",
-        nullptr,
-        this
-    };
-    pinsList.push_back(&outputPin);
-
+    CreateInputPins(numInputs);
 
     printf("ran constructor\n");
 }
@@ -38,7 +17,7 @@ void ViewerNode::DrawBody() {
 
     float value = GetInputValue(inputPins[0]);
 
-    ImGui::Value("value: ", value);
+    ImGui::Value("value", value);
 
     ImGui::Dummy(ImVec2(100.0f, 15.0f));
 
@@ -46,8 +25,10 @@ void ViewerNode::DrawBody() {
     for (int i=0; i<numInputs; i++) {
         ImNodes::BeginInputAttribute(inputPins[i].id);
         ImGui::Text(inputPins[i].title.c_str());
-        ImGui::SameLine();
-        ImGui::TextUnformatted(std::to_string(inputPins[i].id).c_str());
+        if (showIDs) {
+            ImGui::SameLine();
+            ImGui::TextUnformatted(std::to_string(inputPins[i].id).c_str());
+        }
         ImNodes::EndInputAttribute();
     }
 

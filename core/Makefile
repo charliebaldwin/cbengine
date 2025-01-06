@@ -23,7 +23,7 @@ IMNODES_DIR = ../lib/imnodes
 # Compiling Files
 # - start with main
 SOURCES = main.cpp
-SOURCES += node.cpp viewerNode.cpp constantNode.cpp
+SOURCES += node.cpp viewerNode.cpp constantNode.cpp addNode.cpp subNode.cpp multNode.cpp
 # - add imgui code
 SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp
 # - add relevant imgui backends
