@@ -1,0 +1,6 @@
+[submodule "lib/imnodes"]
+	path = lib/imnodes
+	url = https://github.com/Nelarius/imnodes.git
+[submodule "lib/imgui"]
+	path = lib/imgui
+	url = https://github.com/ocornut/imgui.git

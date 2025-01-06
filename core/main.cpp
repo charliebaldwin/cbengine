@@ -21,6 +21,8 @@
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
 #include "node.h"
+#include "viewerNode.h"
+#include "constantNode.h"
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
@@ -88,8 +90,8 @@ int main(int, char**)
     ImNodes::CreateContext();
 
     // Setup Dear ImGui style
-    //ImGui::StyleColorsDark();
-    ImGui::StyleColorsLight();
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsLight();
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -109,6 +111,7 @@ int main(int, char**)
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+    io.Fonts->AddFontFromFileTTF("../assets/fonts/Lexend-Regular.ttf", 15.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != nullptr);
 
@@ -120,6 +123,10 @@ int main(int, char**)
     std::vector<std::pair<int, int>> links;
 
     Node* myNode = new Node("poop node\n");
+    Node* myNode2 = new Node("pee node\n");
+    ViewerNode* myViewerNode = new ViewerNode("Viewer\n");
+    ConstantNode* myConstNode = new ConstantNode("Constant 1\n", 3.5);
+    ConstantNode* myConstNode2 = new ConstantNode("Constant 2\n", 12.33);
 
 
     // Main loop
@@ -158,36 +165,15 @@ int main(int, char**)
             static float f = 0.0f;
             static int counter = 0;
 
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+            ImGui::Begin("Node Editor");                          // Create a window called "Hello, world!" and append into it.
 
             ImNodes::BeginNodeEditor();
 
             myNode->DrawNode();
-
-            // ImNodes::BeginNode(1);
-            // ImNodes::BeginNodeTitleBar();
-            // ImGui::TextUnformatted("input node");
-            // ImNodes::EndNodeTitleBar();
-            // ImGui::Dummy(ImVec2(80.0f, 45.0f));
-            // const int output_attr_id = 3;
-            // ImNodes::BeginOutputAttribute(output_attr_id);
-            // // in between Begin|EndAttribute calls, you can call ImGui
-            // // UI functions
-            // ImGui::Text("output pin");
-            // ImNodes::EndOutputAttribute();
-            // ImNodes::EndNode();
-
-            // ImNodes::BeginNode(2);
-
-            // ImNodes::BeginNodeTitleBar();
-            // ImGui::TextUnformatted("output node");
-            // ImNodes::EndNodeTitleBar();
-            // // pins and other node UI content omitted...
-            // const int input_attr_id = 4;
-            // ImNodes::BeginInputAttribute(input_attr_id);
-            // ImGui::Text("input pin");
-            // ImNodes::EndInputAttribute();
-            // ImNodes::EndNode();
+            myNode2->DrawNode();
+            myViewerNode->DrawNode();
+            myConstNode->DrawNode();
+            myConstNode2->DrawNode();
 
 
 
@@ -204,6 +190,11 @@ int main(int, char**)
             int start_attr, end_attr;
             if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
             {
+                Node* node1 = Node::GetPinParentNode(start_attr);
+                Node* node2 = Node::GetPinParentNode(end_attr);
+
+                node2->ConnectInputNode(node1, 0);
+
                 links.push_back(std::make_pair(start_attr, end_attr));
             }
 
